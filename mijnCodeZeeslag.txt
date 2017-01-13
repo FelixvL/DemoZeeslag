@@ -1,0 +1,67 @@
+import java.util.Scanner;
+
+class Demo{
+	public static void main(String[] args){
+		Zeeslag zeeslag = new Zeeslag();
+		int pogingen = 0;
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("Welkom bij zeeslag");
+		while(!zeeslag.klaar && pogingen < 30){			
+			System.out.println("Poging: " + pogingen + "voer uw schot in: ");
+			int schot = scanner.nextInt();
+			pogingen++;
+			if(schot>=12){
+				continue;
+			}
+			zeeslag.schieten(schot);
+		}
+		System.out.println("Het is afgelopen.");
+	}
+}
+class Zeeslag{
+	Schip vliegdekschip = new Schip(5);
+	Schip sleepboot = new Schip(2);
+	int[] zee = {0,0,1,1,0,0,5,5,5,5,5,0};
+	boolean klaar = false;
+	void schieten(int positie){
+		switch(zee[positie]){
+			case 0:
+				misgeschoten();
+				break;
+			case 1:
+				sleepboot.geraakt();
+				break;
+			case 5:
+				vliegdekschip.geraakt();
+				break;
+			default:
+				System.out.println("IN DEFAULT");
+		}
+		checkGewonnen();
+	}
+	void checkGewonnen(){
+		if(sleepboot.gezonken && vliegdekschip.gezonken){
+			klaar = true;
+		}
+	}
+	void misgeschoten(){
+		System.out.println("Je hebt mis geschoten!");
+	}
+}
+class Schip{
+	int lengte;
+	int aantalKeerGeraakt = 0;
+	boolean gezonken = false;
+	Schip(int lengte){
+		this.lengte = lengte;
+	}
+	void geraakt(){
+		aantalKeerGeraakt++;
+		if(aantalKeerGeraakt >= lengte){
+			System.out.println("Ik ben geraakt en gezonken");
+			gezonken = true;
+		}else{
+			System.out.println("Ik ben alleen geraakt");
+		}
+	}
+}
